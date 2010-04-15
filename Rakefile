@@ -27,7 +27,7 @@ else
   end
 
   namespace :spec do
-    %w[mysql sqlite3 postgresql oracle].each do |adapter|
+    %w[sqlserver mysql sqlite3 postgresql oracle].each do |adapter|
       task "set_env_for_#{adapter}" do
         ENV['ADAPTER'] = adapter
       end
@@ -46,7 +46,7 @@ else
   end
 
   desc "Run specs with mysql and sqlite3 database adapters (default)"
-  task :spec => ["spec:sqlite3", "spec:mysql", "spec:postgresql"]
+  task :spec => ["spec:sqlserver"] #["spec:sqlite3", "spec:mysql", "spec:postgresql"]
 
   desc "Default task is to run specs"
   task :default => :spec
