@@ -9,7 +9,7 @@ module Arel
 
     describe '#to_sql' do
       it "manufactures sql with limit and offset" do
-        sql = Skip.new(@relation, @skipped).to_sql
+        sql = Skip.new(@relation, @skipped).to_sql unless adapter_name == "sqlserver"
 
         adapter_is :mysql do
           sql.should be_like(%Q{
@@ -17,6 +17,10 @@ module Arel
             FROM `users`
             OFFSET 4
           })
+        end
+
+        adapter_is :sqlserver do
+          pending("not yet implemented")
         end
 
         adapter_is :oracle do
@@ -28,7 +32,7 @@ module Arel
           })
         end
 
-        adapter_is_not :mysql, :oracle do
+        adapter_is_not :mysql, :oracle, :sqlserver do
           sql.should be_like(%Q{
             SELECT "users"."id", "users"."name"
             FROM "users"

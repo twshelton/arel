@@ -24,7 +24,14 @@ module Arel
           })
         end
 
-        adapter_is_not :mysql, :oracle do
+        adapter_is :sqlserver do
+          sql.should be_like(%Q{
+            SELECT [users].[id], [users].[name]
+            FROM workers
+          })
+        end
+
+        adapter_is_not :mysql, :oracle, :sqlserver do
           sql.should be_like(%Q{
             SELECT "users"."id", "users"."name"
             FROM workers
@@ -51,7 +58,14 @@ module Arel
           })
         end
 
-        adapter_is_not :mysql, :oracle do
+        adapter_is :sqlserver do
+          sql.should be_like(%Q{
+            SELECT  [users].[id], [users].[name]
+            FROM users
+          })
+        end
+        
+        adapter_is_not :mysql, :oracle, :sqlserver do
           sql.should be_like(%Q{
             SELECT "users"."id", "users"."name"
             FROM users

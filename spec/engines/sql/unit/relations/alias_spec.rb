@@ -36,8 +36,18 @@ module Arel
               ORDER BY "USERS"."ID" ASC
             })
           end
-
-          adapter_is_not :mysql, :oracle do
+          
+          adapter_is :sqlserver do
+            sql.should be_like(%Q{
+              SELECT [users].[id]
+              FROM [users]
+              WHERE [users].[id] = 1
+              GROUP BY [users].[id]
+              ORDER BY [users].[id] ASC
+            })
+          end
+          
+          adapter_is_not :mysql, :oracle, :sqlserver do
             sql.should be_like(%Q{
               SELECT "users"."id"
               FROM "users"

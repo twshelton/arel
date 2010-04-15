@@ -24,6 +24,10 @@ module Arel
           })
         end
 
+        adapter_is :sqlserver do
+          pending("not yet implemented")
+        end
+
         adapter_is :sqlite3 do
           sql.should be_like(%Q{
             SELECT "users"."id", "users"."name"
@@ -52,6 +56,10 @@ module Arel
 
       it "manufactures a select query locking with a given lock" do
         sql = @relation.lock("LOCK IN SHARE MODE").to_sql
+
+        adapter_is :sqlserver do
+          pending("not yet implemented")
+        end
 
         adapter_is :mysql do
           sql.should be_like(%Q{

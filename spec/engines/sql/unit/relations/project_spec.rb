@@ -19,6 +19,13 @@ module Arel
             })
           end
 
+          adapter_is :sqlserver do
+            sql.should be_like(%Q{
+              SELECT [users].[id]
+              FROM [users]
+            })
+          end
+
           adapter_is :oracle do
             sql.should be_like(%Q{
               SELECT "USERS"."ID"
@@ -26,7 +33,7 @@ module Arel
             })
           end
 
-          adapter_is_not :mysql, :oracle do
+          adapter_is_not :mysql, :oracle, :sqlserver do
             sql.should be_like(%Q{
               SELECT "users"."id"
               FROM "users"
@@ -49,13 +56,19 @@ module Arel
             })
           end
 
+          adapter_is :sqlserver do
+            sql.should be_like(%Q{
+              SELECT (SELECT [users].[name] FROM [users]) AS [users] FROM [users]
+            })
+          end
+
           adapter_is :oracle do
             sql.should be_like(%Q{
               SELECT (SELECT "USERS"."NAME" FROM "USERS") AS "USERS" FROM "USERS"
             })
           end
 
-          adapter_is_not :mysql, :oracle do
+          adapter_is_not :mysql, :oracle, :sqlserver do
             sql.should be_like(%Q{
               SELECT (SELECT "users"."name" FROM "users") AS "users" FROM "users"
             })
@@ -73,13 +86,19 @@ module Arel
             })
           end
 
+          adapter_is :sqlserver do
+            sql.should be_like(%Q{
+              SELECT asdf FROM [users]
+            })
+          end
+
           adapter_is :oracle do
             sql.should be_like(%Q{
               SELECT asdf FROM "USERS"
             })
           end
 
-          adapter_is_not :mysql, :oracle do
+          adapter_is_not :mysql, :oracle, :sqlserver do
             sql.should be_like(%Q{
               SELECT asdf FROM "users"
             })
@@ -98,6 +117,13 @@ module Arel
             })
           end
 
+          adapter_is :sqlserver do
+            sql.should be_like(%Q{
+              SELECT COUNT([users].[id]) AS count_id
+              FROM [users]
+            })
+          end
+
           adapter_is :oracle do
             sql.should be_like(%Q{
               SELECT COUNT("USERS"."ID") AS count_id
@@ -105,7 +131,7 @@ module Arel
             })
           end
 
-          adapter_is_not :mysql, :oracle do
+          adapter_is_not :mysql, :oracle, :sqlserver do
             sql.should be_like(%Q{
               SELECT COUNT("users"."id") AS count_id
               FROM "users"
@@ -123,6 +149,13 @@ module Arel
             })
           end
 
+          adapter_is :sqlserver do
+            sql.should be_like(%Q{
+              SELECT COUNT(DISTINCT [users].[id]) AS count_id
+              FROM [users]
+            })
+          end
+
           adapter_is :oracle do
             sql.should be_like(%Q{
               SELECT COUNT(DISTINCT "USERS"."ID") AS count_id
@@ -130,7 +163,7 @@ module Arel
             })
           end
 
-          adapter_is_not :mysql, :oracle do
+          adapter_is_not :mysql, :oracle, :sqlserver do
             sql.should be_like(%Q{
               SELECT COUNT(DISTINCT "users"."id") AS count_id
               FROM "users"

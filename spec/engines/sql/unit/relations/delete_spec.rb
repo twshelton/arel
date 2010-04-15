@@ -17,8 +17,12 @@ module Arel
         adapter_is :oracle do
           sql.should be_like(%Q{DELETE FROM "USERS"})
         end
-
-        adapter_is_not :mysql, :oracle do
+        
+        adapter_is :sqlserver do
+          sql.should be_like(%Q{DELETE FROM [users]})
+        end
+        
+        adapter_is_not :mysql, :oracle, :sqlserver do
           sql.should be_like(%Q{DELETE FROM "users"})
         end
       end
@@ -41,8 +45,16 @@ module Arel
             WHERE "USERS"."ID" = 1
           })
         end
-
-        adapter_is_not :mysql, :oracle do
+        
+        adapter_is :sqlserver do
+          sql.should be_like(%Q{
+            DELETE
+            FROM [users]
+            WHERE [users].[id] = 1
+          })
+        end
+      
+        adapter_is_not :mysql, :oracle, :sqlserver do
           sql.should be_like(%Q{
             DELETE
             FROM "users"
@@ -52,7 +64,7 @@ module Arel
       end
 
       it "manufactures sql deleting a ranged relation" do
-        sql = Deletion.new(@relation.take(1)).to_sql
+        sql = Deletion.new(@relation.take(1)).to_sql unless adapter_name == "sqlserver"
 
         adapter_is :mysql do
           sql.should be_like(%Q{
@@ -69,8 +81,12 @@ module Arel
             WHERE ROWNUM <= 1
           })
         end
-
-        adapter_is_not :mysql, :oracle do
+        
+        adapter_is :sqlserver do
+          pending("not yet implemented")
+        end
+        
+        adapter_is_not :mysql, :oracle, :sqlserver do
           sql.should be_like(%Q{
             DELETE
             FROM "users"

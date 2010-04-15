@@ -23,6 +23,6 @@ module AdapterGuards
   end
 
   def valid_adapters
-    %w[mysql postgresql sqlite3 oracle]
+    %w[mysql postgresql sqlite3 oracle sqlserver]
   end
 end

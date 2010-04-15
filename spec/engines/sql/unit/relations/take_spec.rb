@@ -18,7 +18,14 @@ module Arel
             LIMIT 4
           })
         end
-
+        
+        adapter_is :mysql do
+          sql.should be_like(%Q{
+            SELECT TOP 4 [users].[id], [users].[name]
+            FROM [users]
+          })
+        end
+        
         adapter_is :oracle do
           sql.should be_like(%Q{
             SELECT "USERS"."ID", "USERS"."NAME"
@@ -36,7 +43,7 @@ module Arel
           })
         end
 
-        adapter_is_not :mysql, :oracle do
+        adapter_is_not :mysql, :oracle, :sqlserver do
           sql.should be_like(%Q{
             SELECT "users"."id", "users"."name"
             FROM "users"

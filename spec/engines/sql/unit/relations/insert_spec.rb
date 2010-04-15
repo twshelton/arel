@@ -54,6 +54,14 @@ module Arel
             ("ID", "NAME") VALUES (1, 'nick')
           })
         end
+        
+        adapter_is :sqlserver do
+          @insertion.to_sql.should be_like(%Q{
+            INSERT
+            INTO [users]
+            ([id], [name]) VALUES (1, 'nick')
+          })
+        end
       end
 
       describe 'when given values whose types correspond to the types of the attributes' do
@@ -92,6 +100,14 @@ module Arel
               INSERT
               INTO "USERS"
               ("NAME") VALUES ('nick')
+            })
+          end
+          
+          adapter_is :sqlserver do
+            @insertion.to_sql.should be_like(%Q{
+              INSERT
+              INTO [users]
+              ([name]) VALUES ('nick')
             })
           end
         end
@@ -135,7 +151,14 @@ module Arel
               ("ID") VALUES (1)
             })
           end
-
+          
+          adapter_is :sqlserver do
+            @insertion.to_sql.should be_like(%Q{
+              INSERT
+              INTO [users]
+              ([id]) VALUES (1)
+            })
+          end
         end
       end
     end

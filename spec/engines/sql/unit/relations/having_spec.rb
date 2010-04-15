@@ -28,8 +28,17 @@ module Arel
               HAVING MIN(salary) > 1000
             })
           end
-
-          adapter_is_not :mysql, :oracle do
+          
+            adapter_is :sqlserver do
+            sql.should be_like(%Q{
+              SELECT [developers].[id], [developers].[name], [developers].[salary], [developers].[department], [developers].[created_at]
+              FROM [developers]
+              GROUP BY [developers].[department]
+              HAVING MIN(salary) > 1000
+            })
+          end
+          
+          adapter_is_not :mysql, :oracle, :sqlserver do
             sql.should be_like(%Q{
               SELECT "developers"."id", "developers"."name", "developers"."salary", "developers"."department", "developers"."created_at"
               FROM "developers"

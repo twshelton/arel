@@ -43,6 +43,13 @@ module Arel
             SET "ID" = 1, "NAME" = 'nick'
           })
         end
+        
+        adapter_is :sqlserver do
+          sql.should be_like(%Q{
+            UPDATE [users]
+            SET [id] = 1, [name] = 'nick'
+          })
+        end
       end
 
       it "manufactures sql updating attributes when given a ranged relation" do
@@ -71,7 +78,15 @@ module Arel
             WHERE "id" IN (SELECT "id" FROM "users"  LIMIT 1)
           })
         end
-
+        
+        adapter_is :sqlserver do
+          sql.should be_like(%Q{
+            UPDATE [users] SET
+            [name] = 'nick'
+            WHERE [id] IN (SELECT TOP 1 [id] FROM [users] )
+          })
+        end
+        
         adapter_is :oracle do
           sql.should be_like(%Q{
             UPDATE "USERS" SET
@@ -117,6 +132,13 @@ module Arel
             })
           end
 
+          adapter_is :sqlserver do
+            @update.to_sql.should be_like(%Q{
+              UPDATE [users]
+              SET [name] = 'nick'
+            })
+          end
+          
           adapter_is :oracle do
             @update.to_sql.should be_like(%Q{
               UPDATE "USERS"
@@ -145,8 +167,13 @@ module Arel
               SET "ID" = 1
             })
           end
-
-          adapter_is_not :mysql, :oracle do
+          adapter_is :sqlserver do
+            @update.to_sql.should be_like(%Q{
+              UPDATE [users]
+              SET [id] = 1
+            })
+          end
+          adapter_is_not :mysql, :oracle, :sqlserver do
             @update.to_sql.should be_like(%Q{
               UPDATE "users"
               SET "id" = 1
@@ -179,7 +206,15 @@ module Arel
               WHERE "users"."id" = 1
             })
           end
-
+          
+          adapter_is :sqlserver do
+            @update.to_sql.should be_like(%Q{
+              UPDATE [users]
+              SET [name] = 'nick'
+              WHERE [users].[id] = 1
+            })
+          end
+          
           adapter_is :postgresql do
             @update.to_sql.should be_like(%Q{
               UPDATE "users"

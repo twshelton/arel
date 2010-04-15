@@ -35,11 +35,13 @@ else
       Spec::Rake::SpecTask.new(adapter) do |t|
         t.spec_opts = ['--options', "\"#{File.dirname(__FILE__)}/spec/spec.opts\""]
         t.libs << "#{File.dirname(__FILE__)}/vendor/rails/activerecord/lib"
+        t.libs << "#{File.dirname(__FILE__)}/vendor/activerecord_sqlserver_adapter/lib/"
         t.libs << "#{File.dirname(__FILE__)}/spec"
         # t.warning = true
         t.spec_files = FileList['spec/**/*_spec.rb']
+        #t.spec_files = FileList['spec/engines/sql/unit/relations/where_spec.rb']
       end
-
+      
       desc "Run specs with the #{adapter} database adapter"
       task adapter => "set_env_for_#{adapter}"
     end
