@@ -1,5 +1,6 @@
 puts "Using native SQLServer"
 require "active_record"
+require "activerecord-sqlserver-adapter"
 require 'logger'
 
 ENV['ADAPTER'] = 'sqlserver'

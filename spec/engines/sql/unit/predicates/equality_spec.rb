@@ -19,11 +19,16 @@ module Arel
               sql.should be_like(%Q{`users`.`id` = `photos`.`user_id`})
             end
 
+            adapter_is :sqlserver do
+              sql.should be_like(%Q{[users].[id] = [photos].[user_id]})
+            end
+
+
             adapter_is :oracle do
               sql.should be_like(%Q{"USERS"."ID" = "PHOTOS"."USER_ID"})
             end
 
-            adapter_is_not :mysql, :oracle do
+            adapter_is_not :mysql, :oracle, :sqlserver do
               sql.should be_like(%Q{"users"."id" = "photos"."user_id"})
             end
           end
@@ -40,12 +45,15 @@ module Arel
             adapter_is :mysql do
               sql.should be_like(%Q{`users`.`id` IS NULL})
             end
+            adapter_is :sqlserver do
+              sql.should be_like(%Q{[users].[id] IS NULL})
+            end
 
             adapter_is :oracle do
               sql.should be_like(%Q{"USERS"."ID" IS NULL})
             end
 
-            adapter_is_not :mysql, :oracle do
+            adapter_is_not :mysql, :oracle, :sqlserver do
               sql.should be_like(%Q{"users"."id" IS NULL})
             end
           end
@@ -60,11 +68,15 @@ module Arel
               sql.should be_like(%Q{`users`.`id` IS NULL})
             end
 
+            adapter_is :sqlserver do
+              sql.should be_like(%Q{[users].[id] IS NULL})
+            end
+
             adapter_is :oracle do
               sql.should be_like(%Q{"USERS"."ID" IS NULL})
             end
 
-            adapter_is_not :mysql, :oracle do
+            adapter_is_not :mysql, :oracle, :sqlserver do
               sql.should be_like(%Q{"users"."id" IS NULL})
             end
           end

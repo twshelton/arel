@@ -14,7 +14,7 @@ module Arel
       @photos.insert(@photos[:id] => 2, @photos[:user_id] => 2, @photos[:camera_id] => 42)
       # Oracle adapter returns database integers as Ruby integers and not strings
       @adapter_returns_integer = false
-      adapter_is :oracle do
+      adapter_is :oracle, :sqlserver do
         @adapter_returns_integer = true
       end
     end

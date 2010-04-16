@@ -39,6 +39,13 @@ module Arel
                 ("USERS"."ID" = 1 AND "USERS"."NAME" = 'name')
               })
             end
+
+            adapter_is :sqlserver do
+              sql.should be_like(%Q{
+                ([users].[id] = 1 AND [users].[name] = 'name')
+              })
+            end
+
           end
         end
       end
@@ -71,6 +78,13 @@ module Arel
                 ("USERS"."ID" = 1 OR "USERS"."NAME" = 'name')
               })
             end
+            
+            adapter_is :sqlserver do
+              sql.should be_like(%Q{
+                ([users].[id] = 1 OR [users].[name] = 'name')
+              })
+            end
+            
           end
         end
       end

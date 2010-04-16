@@ -22,6 +22,15 @@ module Arel
             })
           end
 
+          adapter_is :sqlserver do
+            sql.should be_like(%Q{
+              SELECT [users].[id], [users].[name], [users_2].[id], [users_2].[name]
+              FROM [users]
+                INNER JOIN [users] [users_2]
+                  ON [users].[id] = [users_2].[id]
+            })
+          end
+
           adapter_is :oracle do
             sql.should be_like(%Q{
               SELECT "USERS"."ID", "USERS"."NAME", "USERS_2"."ID", "USERS_2"."NAME"
@@ -31,7 +40,7 @@ module Arel
             })
           end
 
-          adapter_is_not :mysql, :oracle do
+          adapter_is_not :mysql, :oracle, :sqlserver do
             sql.should be_like(%Q{
               SELECT "users"."id", "users"."name", "users_2"."id", "users_2"."name"
               FROM "users"
@@ -57,6 +66,14 @@ module Arel
               })
             end
 
+            adapter_is :sqlserver do
+              sql.should be_like(%Q{
+                SELECT [users].[id], [users].[name], [users_2].[id], [users_2].[name]
+                FROM [users]
+                  INNER JOIN [users] [users_2]
+                    ON [users].[id] = [users_2].[id] AND [users_2].[id] = 1
+              })
+            end
             adapter_is :oracle do
               sql.should be_like(%Q{
                 SELECT "USERS"."ID", "USERS"."NAME", "USERS_2"."ID", "USERS_2"."NAME"
@@ -66,7 +83,7 @@ module Arel
               })
             end
 
-            adapter_is_not :mysql, :oracle do
+            adapter_is_not :mysql, :oracle, :sqlserver do
               sql.should be_like(%Q{
                 SELECT "users"."id", "users"."name", "users_2"."id", "users_2"."name"
                 FROM "users"
@@ -94,6 +111,15 @@ module Arel
                 })
               end
 
+              adapter_is :sqlserver do
+                sql.should be_like(%Q{
+                  SELECT [users].[id], [users].[name], [users_2].[id], [users_2].[name]
+                  FROM [users]
+                    INNER JOIN [users] [users_2]
+                      ON [users_2].[id] = [users].[id] AND [users_2].[id] = 1
+                })
+              end
+              
               adapter_is :oracle do
                 sql.should be_like(%Q{
                   SELECT "USERS"."ID", "USERS"."NAME", "USERS_2"."ID", "USERS_2"."NAME"
@@ -103,7 +129,7 @@ module Arel
                 })
               end
 
-              adapter_is_not :mysql, :oracle do
+              adapter_is_not :mysql, :oracle, :sqlserver do
                 sql.should be_like(%Q{
                   SELECT "users"."id", "users"."name", "users_2"."id", "users_2"."name"
                   FROM "users"
@@ -140,6 +166,18 @@ module Arel
                 })
               end
 
+               adapter_is :sqlserver do
+                  sql.should be_like(%Q{
+                    SELECT [users].[id], [users].[name], [users_2].[id], [users_2].[name], [users_3].[id], [users_3].[name]
+                    FROM [users]
+                      INNER JOIN [users] [users_2]
+                        ON [users].[id] = [users_2].[id]
+                      INNER JOIN [users] [users_3]
+                        ON [users_2].[id] = [users_3].[id]
+
+                  })
+                end
+                
               adapter_is :oracle do
                 sql.should be_like(%Q{
                   SELECT "USERS"."ID", "USERS"."NAME", "USERS_2"."ID", "USERS_2"."NAME", "USERS_3"."ID", "USERS_3"."NAME"
@@ -151,7 +189,7 @@ module Arel
                 })
               end
 
-              adapter_is_not :mysql, :oracle do
+              adapter_is_not :mysql, :oracle, :sqlserver do
                 sql.should be_like(%Q{
                   SELECT "users"."id", "users"."name", "users_2"."id", "users_2"."name", "users_3"."id", "users_3"."name"
                   FROM "users"
@@ -182,6 +220,18 @@ module Arel
                 })
               end
 
+              adapter_is :sqlserver do
+                  sql.should be_like(%Q{
+                    SELECT [users].[id], [users].[name], [users_2].[id], [users_2].[name], [users_3].[id], [users_3].[name]
+                    FROM [users]
+                      INNER JOIN [users] [users_2]
+                        ON [users].[id] = [users_2].[id]
+                      INNER JOIN [users] [users_3]
+                        ON [users_2].[id] = [users_3].[id]
+
+                  })
+                end
+                
               adapter_is :oracle do
                 sql.should be_like(%Q{
                   SELECT "USERS"."ID", "USERS"."NAME", "USERS_2"."ID", "USERS_2"."NAME", "USERS_3"."ID", "USERS_3"."NAME"
@@ -193,7 +243,7 @@ module Arel
                 })
               end
 
-              adapter_is_not :mysql, :oracle do
+              adapter_is_not :mysql, :oracle, :sqlserver do
                 sql.should be_like(%Q{
                   SELECT "users"."id", "users"."name", "users_2"."id", "users_2"."name", "users_3"."id", "users_3"."name"
                   FROM "users"

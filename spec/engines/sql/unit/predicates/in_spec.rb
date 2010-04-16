@@ -22,11 +22,16 @@ module Arel
                 sql.should be_like(%Q{`users`.`id` IN (1, 2, 3)})
               end
 
+              adapter_is :sqlserver do
+                sql.should be_like(%Q{[users].[id] IN (1, 2, 3)})
+              end
+
+
               adapter_is :oracle do
                 sql.should be_like(%Q{"USERS"."ID" IN (1, 2, 3)})
               end
 
-              adapter_is_not :mysql, :oracle do
+              adapter_is_not :mysql, :oracle, :sqlserver do
                 sql.should be_like(%Q{"users"."id" IN (1, 2, 3)})
               end
             end
@@ -44,11 +49,15 @@ module Arel
                 sql.should be_like(%Q{`users`.`id` IN (1, 2, 3)})
               end
 
+              adapter_is :mysql do
+                sql.should be_like(%Q{[users].[id] IN (1, 2, 3)})
+              end
+
               adapter_is :oracle do
                 sql.should be_like(%Q{"USERS"."ID" IN (1, 2, 3)})
               end
 
-              adapter_is_not :mysql, :oracle do
+              adapter_is_not :mysql, :oracle, :sqlserver do
                 sql.should be_like(%Q{"users"."id" IN (1, 2, 3)})
               end
             end
@@ -66,11 +75,15 @@ module Arel
                 sql.should be_like(%Q{`users`.`id` IN (NULL)})
               end
 
+              adapter_is :sqlserver do
+                sql.should be_like(%Q{[users].[id] IN (NULL)})
+              end
+
               adapter_is :oracle do
                 sql.should be_like(%Q{"USERS"."ID" IN (NULL)})
               end
 
-              adapter_is_not :mysql, :oracle do
+              adapter_is_not :mysql, :oracle, :sqlserver do
                 sql.should be_like(%Q{"users"."id" IN (NULL)})
               end
             end
@@ -90,11 +103,16 @@ module Arel
               sql.should be_like(%Q{`users`.`id` BETWEEN 1 AND 2})
             end
 
+            adapter_is :sqlserver do
+              sql.should be_like(%Q{[users].[id] BETWEEN 1 AND 2})
+            end
+
+
             adapter_is :oracle do
               sql.should be_like(%Q{"USERS"."ID" BETWEEN 1 AND 2})
             end
 
-            adapter_is_not :mysql, :oracle do
+            adapter_is_not :mysql, :oracle, :sqlserver do
               sql.should be_like(%Q{"users"."id" BETWEEN 1 AND 2})
             end
           end
@@ -112,6 +130,10 @@ module Arel
 
             adapter_is :mysql do
               sql.should be_like(%Q{`developers`.`created_at` BETWEEN '2010-01-01 00:00:00' AND '2010-02-01 00:00:00'})
+            end
+
+            adapter_is :sqlserver do
+              sql.should be_like(%Q{[developers].[created_at] BETWEEN CAST('2010-01-01 00:00:00' AS datetime) AND CAST('2010-02-01 00:00:00' AS datetime)})
             end
 
             adapter_is :sqlite3 do
@@ -141,14 +163,20 @@ module Arel
                 `users`.`id` IN (SELECT `users`.`id`, `users`.`name` FROM `users`)
               })
             end
-
+            
+            adapter_is :sqlserver do
+              sql.should be_like(%Q{
+                [users].[id] IN (SELECT [users].[id], [users].[name] FROM [users])
+              })
+            end
+            
             adapter_is :oracle do
               sql.should be_like(%Q{
                 "USERS"."ID" IN (SELECT "USERS"."ID", "USERS"."NAME" FROM "USERS")
               })
             end
 
-            adapter_is_not :mysql, :oracle do
+            adapter_is_not :mysql, :oracle, :sqlserver do
               sql.should be_like(%Q{
                 "users"."id" IN (SELECT "users"."id", "users"."name" FROM "users")
               })

@@ -14,12 +14,16 @@ module Arel
         adapter_is :mysql do
           sql.should be_like(%Q{COUNT(`users`.`id`) AS `alias`})
         end
+        
+        adapter_is :sqlserver do
+          sql.should be_like(%Q{COUNT([users].[id]) AS [alias]})
+        end
 
         adapter_is :oracle do
           sql.should be_like(%Q{COUNT("USERS"."ID") AS "ALIAS"})
         end
 
-        adapter_is_not :mysql, :oracle do
+        adapter_is_not :mysql, :oracle, :sqlserver do
           sql.should be_like(%Q{COUNT("users"."id") AS "alias"})
         end
       end

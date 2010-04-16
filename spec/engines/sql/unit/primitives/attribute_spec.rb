@@ -22,11 +22,15 @@ module Arel
             sql.should be_like(%Q{`users`.`id`})
           end
 
+          adapter_is :sqlserver do
+            sql.should be_like(%Q{[users].[id]})
+          end
+
           adapter_is :oracle do
             sql.should be_like(%Q{"USERS"."ID"})
           end
 
-          adapter_is_not :mysql, :oracle do
+          adapter_is_not :mysql, :oracle, :sqlserver do
             sql.should be_like(%Q{"users"."id"})
           end
         end
@@ -40,11 +44,15 @@ module Arel
             sql.should be_like(%Q{`users`.`does_not_exist`})
           end
 
+          adapter_is :sqlserver do
+            sql.should be_like(%Q{[users].[does_not_exist]})
+          end
+
           adapter_is :oracle do
             sql.should be_like(%Q{"USERS"."DOEST_NOT_EXIST"})
           end
 
-          adapter_is_not :mysql, :oracle do
+          adapter_is_not :mysql, :oracle, :sqlserver do
             sql.should be_like(%Q{"users"."does_not_exist"})
           end
         end
